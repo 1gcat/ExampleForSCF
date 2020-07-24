@@ -4,21 +4,48 @@ import json
 import time
 import re
 from bs4 import BeautifulSoup
+from json.decoder import JSONDecodeError
 
-cookies = '你的cookie'
-aid='883409884'
+cookies = ''  # 配置你的cookie
+bid = 'BV1PK4y1b7dt'  # 配置需观看的视频BV号
+sckey = '' # 配置server酱SCKEY
+
 uid=re.match('(?<=DedeUserID=).*?(?=;)',cookies)
 sid=re.match('(?<=sid=).*?(?=;)',cookies)
 csrf=re.match('(?<=bili_jct=).*',cookies)
 
+# bv转av
+def bv_to_av(bv):
+    headers={   
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
+    }
+    r = requests.get('https://api.bilibili.com/x/web-interface/view', {'bvid': bv}, headers=headers)
+    response = decode_json(r)
+    try:
+        return str(response['data']['aid'])
+    except (KeyError, TypeError):
+        return '883409884'
+
+# json解析
+def decode_json(r):
+    try:
+        response = r.json()
+    except JSONDecodeError:
+        # 虽然用的是requests的json方法，但要捕获的这个异常来自json模块
+        return -1
+    else:
+        return response
+
+
+# server酱
 def pushinfo(info,specific):
     headers={   
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
     'ContentType': 'text/html'
     }
-    requests.session().get("https://sc.ftqq.com/你的server酱SCKEY.send?text=" + info + "&desp=" + specific,headers=headers)
+    requests.session().get("https://sc.ftqq.com/"+sckey+".send?text=" + info + "&desp=" + specific,headers=headers)
 
-
+# 登录
 def login():
     headers={   
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
@@ -35,6 +62,7 @@ def login():
         print('登录失败：'+msg)
         return False
 
+# 获取用户信息
 def get_user_info():
     headers = {
         'Cookie':cookies
@@ -61,6 +89,7 @@ def get_user_info():
         print("用户信息获取失败："+msg)
         return "用户信息获取失败："+msg
 
+# 直播签到
 def do_sign():
     headers = {
         'Cookie':cookies
@@ -77,8 +106,9 @@ def do_sign():
         print("直播签到失败："+msg)
         return False
 
+# 看视频
 def watch():
-        # aid = 稿件av号
+        aid=bv_to_av(bid)
         headers = {
             'Cookie':cookies
         }
@@ -137,6 +167,8 @@ def watch():
                     return True
         print(f"av{aid}观看失败 {response}")
         return False
+
+
 
 def main(*args):
     if login():

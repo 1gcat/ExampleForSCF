@@ -20,7 +20,7 @@
 >```
 >&emsp;&emsp;网页端分享API：  
 >```
->https//api.bilibili.com/x/web-interface/share/add
+>https://api.bilibili.com/x/web-interface/share/add
 >```
 >&emsp;&emsp;这两个接口貌似都能完成`客户端分享视频`的任务，但是以`Cookie`登录却无法完成，可能需要`access_key`，那就必须使用账号密码登录来获取，而使用`账号密码`登录就容易出现验证，参考了多个项目的实现方式，发现都是针对图形验证码的，而我测试的时候要么是手机验证要么是滑块验证（就很玄学），这对于`SCF`来说不太适合。水平有限，如果你有适合`SCF`的解决方法麻烦提一个`issue`或`Pr`，感谢。
 
@@ -40,6 +40,16 @@
 | bs4.zip | python3依赖包 |
 
 # 使用说明
+
+## 获取Cookie
+
+&emsp;&emsp;打开浏览器，按F12，在Network处查找，还不会的话请自行百度！
+
+## Server酱
+
+&emsp;&emsp;官网：http://sc.ftqq.com/3.version
+
+## 腾讯云SCF（云函数）
 
 1. 复制代码至`云函数`，保存文件名为`index.py`
 2. `执行方法`设置为`index.main`

@@ -1,19 +1,45 @@
-# 简介
+# 项目简介
 
-腾讯云SCF（云函数）的python脚本，用于每天自动签到，一个是吾爱破解论坛的一个是哔哩哔哩的，作为我了解SCF的示例。
+&emsp;&emsp;腾讯云SCF（云函数）的python脚本，用于每天自动签到，一个是吾爱破解论坛的一个是哔哩哔哩的，作为我了解SCF的示例。
 
-- **52pojieCheckIn.py**
-    - 吾爱破解论坛每日签到 （已完成）
-- **BilibiliCheckIn.py**
-    - 每日直播签到赚银瓜子  （已完成）
-    - 每日观看视频赚经验  （已完成）
-    - 每日登录赚经验  （已完成）
-    - 每日分享赚经验  （未完成，网页端的api不能完成此任务，需客户端的api）
-    - 每日投币赚经验  （可以完成但没必要，不投，要白嫖经验！）
-- **bs4.zip**：
-    - python3依赖包
+# 功能实现
+## 52pojieCheckIn
+- 【已完成】每日签到
 
-# 使用
+## BilibiliCheckIn
+- 【已完成】每日直播签到赚银瓜子
+- 【已完成】每日观看视频赚经验
+- 【已完成】每日登录赚经验
+ ---
+- 【未完成】每日分享赚经验  
+
+>&emsp;&emsp;客户端分享API：  
+>```
+>https://app.bilibili.com/x/v2/view/share/click
+>https://app.bilibili.com/x/v2/view/share/complete
+>```
+>&emsp;&emsp;网页端分享API：  
+>```
+>https//api.bilibili.com/x/web-interface/share/add
+>```
+>&emsp;&emsp;这两个接口貌似都能完成`客户端分享视频`的任务，但是以`Cookie`登录却无法完成，可能需要`access_key`，那就必须使用账号密码登录来获取，而使用`账号密码`登录就容易出现验证，参考了多个项目的实现方式，发现都是针对图形验证码的，而我测试的时候要么是手机验证要么是滑块验证（就很玄学），这对于`SCF`来说不太适合。水平有限，如果你有适合`SCF`的解决方法麻烦提一个`issue`或`Pr`，感谢。
+
+- 【未完成】每日投币赚经验  
+
+>&emsp;&emsp;可以完成但没必要，不投，要白嫖经验！如果你需要的话，请使用`https://api.bilibili.com/x/web-interface/coin/add`这个接口，提交参数为`aid`、`multiply`、`cross_domain`、`csrf`
+
+ 
+
+
+# 项目结构
+
+|  文件   | 描述 |
+|  :----:   | :----: |
+| 52pojieCheckIn.py | 吾爱破解论坛 |
+| BilibiliCheckIn.py | 哔哩哔哩 |
+| bs4.zip | python3依赖包 |
+
+# 使用说明
 
 1. 复制代码至`云函数`，保存文件名为`index.py`
 2. `执行方法`设置为`index.main`
@@ -21,7 +47,7 @@
 4. 在`层管理`绑定刚刚新建的`层`
 5. 测试成功后在`触发管理`里设置触发器
 
-# 参考
+# 参考资料
 
 感谢：  
 

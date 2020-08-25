@@ -1,12 +1,8 @@
 # -*- coding: utf8 -*-
 import requests 
-import hashlib
 import json
 import time
 import re
-import rsa
-import base64
-from urllib import parse
 from bs4 import BeautifulSoup
 from json.decoder import JSONDecodeError
 
@@ -14,13 +10,9 @@ cookies = ''  # 配置你的cookie
 sckey = '' # 配置server酱SCKEY
 bid = 'BV1PK4y1b7dt'  # 配置需观看的视频BV号
 
-
 uid=re.match('(?<=DedeUserID=).*?(?=;)',cookies)
 sid=re.match('(?<=sid=).*?(?=;)',cookies)
 csrf=re.match('(?<=bili_jct=).*',cookies)
-
-
-
 
 
 # bv转av

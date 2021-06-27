@@ -2,17 +2,19 @@
 import requests 
 from bs4 import BeautifulSoup
 
+cookie = ''  # 配置你的cookie
+sckey = '' # 配置你的server酱SCKEY
+
 def pushinfo(info,specific):
     headers={   
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
     'ContentType': 'text/html'
     }
-    requests.session().get("https://sc.ftqq.com/你的server酱SCKEY.send?text=" + info + "&desp=" + specific,headers=headers)
-
+    requests.session().get("https://sc.ftqq.com/"+sckey+".send?text=" + info + "&desp=" + specific,headers=headers)
 
 def main(*args):
     headers={
-        'Cookie': '你的cookie' ,
+        'Cookie': cookie,
         'ContentType':'text/html;charset=gbk'
     }
     requests.session().get('https://www.52pojie.cn/home.php?mod=task&do=apply&id=2',headers=headers)

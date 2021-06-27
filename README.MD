@@ -1,8 +1,9 @@
 # 项目简介
 
-&emsp;&emsp;腾讯云SCF（云函数）的python脚本，用于每天自动签到，一个是吾爱破解论坛的一个是哔哩哔哩的，作为我了解SCF的示例。
+&emsp;&emsp;腾讯云SCF（云函数）、Github Actions的python脚本，用于每天自动签到，一个是吾爱破解论坛的一个是哔哩哔哩的，作为我了解SCF的示例。
 
 # 功能实现
+
 ## 52pojieCheckIn
 - 【已完成】每日签到
 
@@ -29,8 +30,6 @@
 >&emsp;&emsp;可以完成但没必要，不投，要白嫖经验！如果你需要的话，请使用`https://api.bilibili.com/x/web-interface/coin/add`这个接口，提交参数为`aid`、`multiply`、`cross_domain`、`csrf`
 
  
-
-
 # 项目结构
 
 |  文件   | 描述 |
@@ -41,13 +40,17 @@
 
 # 使用说明
 
+## 注意事项
+
+&emsp;&emsp;吾爱破解论坛的签到有点奇怪，没研究是啥问题引起的，有时可以正常签到有时又提示：不是进行中的任务，可以尝试循环签到几次（反正我是这么解决的，哈哈哈），知道原因的同学麻烦发个Pr，感谢。
+
 ## 获取Cookie
 
 &emsp;&emsp;打开浏览器，按F12，在Network处查找，还不会的话请自行百度！
 
 ## Server酱
 
-&emsp;&emsp;官网：http://sc.ftqq.com/3.version
+&emsp;&emsp;可选，用于消息反馈，如需使用其他同类型产品，修改一下`pushinfo`函数就行。 官网：http://sc.ftqq.com/3.version
 
 ## 腾讯云SCF（云函数）
 

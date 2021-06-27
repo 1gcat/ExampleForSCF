@@ -6,13 +6,13 @@ import re
 from bs4 import BeautifulSoup
 from json.decoder import JSONDecodeError
 
-cookies = ''  # 配置你的cookie
-sckey = '' # 配置server酱SCKEY
-bid = 'BV1PK4y1b7dt'  # 配置需观看的视频BV号
+cookie = ''  # 配置你的cookie
+sckey = '' # 配置你的server酱SCKEY
+bid = 'BV1mD4y1U7z9'  # 配置需观看的视频BV号
 
-uid=re.match('(?<=DedeUserID=).*?(?=;)',cookies)
-sid=re.match('(?<=sid=).*?(?=;)',cookies)
-csrf=re.match('(?<=bili_jct=).*',cookies)
+uid=re.match('(?<=DedeUserID=).*?(?=;)',cookie)
+sid=re.match('(?<=sid=).*?(?=;)',cookie)
+csrf=re.match('(?<=bili_jct=).*',cookie)
 
 
 # bv转av
@@ -50,7 +50,7 @@ def pushinfo(info,specific):
 def login():
     headers={   
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36',
-    'Cookie':cookies
+    'Cookie':cookie
     }
     response = requests.session().get('http://api.bilibili.com/x/space/myinfo',headers=headers)
     rejson = json.loads(response.text)
@@ -66,7 +66,7 @@ def login():
 # 获取用户信息
 def get_user_info():
     headers = {
-        'Cookie':cookies
+        'Cookie':cookie
     }
     response = requests.session().get('http://api.bilibili.com/x/space/myinfo?jsonp=jsonp',headers=headers)
     rejson = json.loads(response.text)
@@ -93,7 +93,7 @@ def get_user_info():
 # 直播签到
 def do_sign():
     headers = {
-        'Cookie':cookies
+        'Cookie':cookie
     }
     response = requests.session().get('https://api.live.bilibili.com/sign/doSign',headers=headers)
     rejson = json.loads(response.text)
@@ -111,7 +111,7 @@ def do_sign():
 def watch():
         aid=bv_to_av(bid)
         headers = {
-            'Cookie':cookies
+            'Cookie':cookie
         }
         response = requests.session().get('http://api.bilibili.com/x/web-interface/view?aid='+str(aid),headers=headers)
         rejson = json.loads(response.text)
@@ -126,46 +126,30 @@ def watch():
         payload = {
             'aid': aid,
             'cid': cid,
-            'part': 1,
-            'did': sid,
-            'ftime': int(time.time()),
             'jsonp': "jsonp",
-            'lv': None,
             'mid': uid,
             'csrf': csrf,
-            'stime': int(time.time()),
+            'played_time': 0,
+            'pause': False,
+            'realtime': duration,
+            'dt': 7,
+            'play_type': 1,
+            'start_ts': int(time.time()),
         }
-        response = requests.session().post('http://api.bilibili.com/x/report/click/h5',data=payload,headers=headers)
+        response = requests.session().post('http://api.bilibili.com/x/report/web/heartbeat',data=payload,headers=headers)
         rejson = json.loads(response.text)
         code = rejson['code']
         if code == 0:
-            payload = {
-                'aid': aid,
-                'cid': cid,
-                'jsonp': "jsonp",
-                'mid': uid,
-                'csrf': csrf,
-                'played_time': 0,
-                'pause': False,
-                'realtime': duration,
-                'dt': 7,
-                'play_type': 1,
-                'start_ts': int(time.time()),
-            }
+            time.sleep(5)
+            payload['played_time'] = duration - 1
+            payload['play_type'] = 0
+            payload['start_ts'] = int(time.time())
             response = requests.session().post('http://api.bilibili.com/x/report/web/heartbeat',data=payload,headers=headers)
             rejson = json.loads(response.text)
             code = rejson['code']
             if code == 0:
-                time.sleep(5)
-                payload['played_time'] = duration - 1
-                payload['play_type'] = 0
-                payload['start_ts'] = int(time.time())
-                response = requests.session().post('http://api.bilibili.com/x/report/web/heartbeat',data=payload,headers=headers)
-                rejson = json.loads(response.text)
-                code = rejson['code']
-                if code == 0:
-                    print(f"av{aid}观看成功")
-                    return True
+                print(f"av{aid}观看成功")
+                return True
         print(f"av{aid}观看失败 {response}")
         return False
 
